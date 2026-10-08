@@ -11,8 +11,12 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Registros</h1>
-        <a href="{{ route('formulario') }}" class="btn btn-primary">Nuevo registro</a>
+        <a href="{{ route('informacion-personal.create') }}" class="btn btn-primary">Nuevo registro</a>
     </div>
+
+    @if (session('exito'))
+        <div class="alert alert-success">{{ session('exito') }}</div>
+    @endif
 
     @if ($registros->isEmpty())
         <div class="alert alert-info">Todavía no hay registros.</div>
@@ -25,6 +29,7 @@
                     <th>Correo</th>
                     <th>Fecha de Nacimiento</th>
                     <th>Registrado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +40,15 @@
                         <td>{{ $registro->correo }}</td>
                         <td>{{ $registro->fecha_nacimiento }}</td>
                         <td>{{ $registro->created_at->format('d/m/Y H:i') }}</td>
+                        <td class="text-nowrap">
+                            <a href="{{ route('informacion-personal.show', $registro) }}" class="btn btn-sm btn-info">Ver</a>
+                            <a href="{{ route('informacion-personal.edit', $registro) }}" class="btn btn-sm btn-warning">Editar</a>
+                            <form action="{{ route('informacion-personal.destroy', $registro) }}" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar este registro?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

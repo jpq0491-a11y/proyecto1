@@ -25,25 +25,30 @@
         </div>
     @endif
 
-    <form action="{{ route('recibeFormulario') }}" method="post">
+    @php($registro = $registro ?? null)
+
+    <form action="{{ $registro ? route('informacion-personal.update', $registro) : route('informacion-personal.store') }}" method="post">
         @csrf
+        @if ($registro)
+            @method('PUT')
+        @endif
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre') }}" required>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre', $registro?->nombre) }}" required>
         </div>
 
         <div class="mb-3">
             <label for="correo" class="form-label">Correo:</label>
-            <input type="email" class="form-control" id="correo" name="correo" value="{{ old('correo') }}" required>
+            <input type="email" class="form-control" id="correo" name="correo" value="{{ old('correo', $registro?->correo) }}" required>
         </div>
 
         <div class="mb-3">
             <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
-            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}" required>
+            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ old('fecha_nacimiento', $registro?->fecha_nacimiento) }}" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Enviar</button>
-        <a href="{{ route('registros') }}" class="btn btn-secondary">Ver registros</a>
+        <button type="submit" class="btn btn-primary">{{ $registro ? 'Actualizar' : 'Enviar' }}</button>
+        <a href="{{ route('informacion-personal.index') }}" class="btn btn-secondary">Ver registros</a>
     </form>
 
     <!-- Bootstrap JS -->
